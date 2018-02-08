@@ -56,13 +56,13 @@ public final class QueryUtils {
                 JSONObject props = arr.getJSONObject(i).getJSONObject("properties");
                 String location = props.getString("place");
                 Double magnitude = props.getDouble("mag");
-                Date date = new Date(props.getLong("time"));
+                long timestamp = props.getLong("time");
 
                 Log.d("QueryUtils", "magnitude: " + magnitude
                         + ", location: " + location
-                        + ", date: " + date);
+                        + ", timestamp: " + timestamp);
 
-                Earthquake eq = new Earthquake(magnitude, location, date);
+                Earthquake eq = new Earthquake(magnitude, location, timestamp);
                 earthquakes.add(eq);
             }
 
