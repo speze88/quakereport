@@ -67,10 +67,18 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         // Find the TextView in the list_item.xml layout with the ID location
         TextView locationTextView = (TextView) listItemView.findViewById(R.id.location);
+        TextView locationOffsetTextView = (TextView) listItemView.findViewById(R.id.locationoffset);
 
         // Get the location from the current Earthquake object and
         // set this text on the location TextView
-        locationTextView.setText(currentEarthquake.getLocation());
+        String[] location = currentEarthquake.getLocation().split("of");
+        if(location.length == 1) {
+            locationOffsetTextView.setText(null);
+            locationOffsetTextView.setText(location[0].trim());
+        } else  {
+            locationOffsetTextView.setText(location[0].trim());
+            locationTextView.setText(location[1].trim());
+        }
 
         // Find the Textview in the list_item.xml layout with the ID date
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
