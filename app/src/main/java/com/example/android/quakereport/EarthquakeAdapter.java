@@ -7,8 +7,8 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
-import java.text.SimpleDateFormat;
 import java.util.ArrayList;
+import android.util.Log;
 
 /**
  * Created by benjaminfras on 10/8/17.
@@ -71,14 +71,8 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         // Get the location from the current Earthquake object and
         // set this text on the location TextView
-        String[] location = currentEarthquake.getLocation().split("of");
-        if(location.length == 1) {
-            locationOffsetTextView.setText(null);
-            locationOffsetTextView.setText(location[0].trim());
-        } else  {
-            locationOffsetTextView.setText(location[0].trim());
-            locationTextView.setText(location[1].trim());
-        }
+        locationOffsetTextView.setText(splitEarthquakeLocaction(currentEarthquake.getLocation())[0]);
+        locationTextView.setText(splitEarthquakeLocaction(currentEarthquake.getLocation())[1]);
 
         // Find the Textview in the list_item.xml layout with the ID date
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
@@ -90,5 +84,25 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         // Return the whole list item layout (containing 3 TextViews)
         // so that it can be shown in the ListView
         return listItemView;
+    }
+
+    /**
+     *
+     * @param earthquakeLocation
+     * @return Returns an array with locationOffset and location
+     */
+    private String[] splitEarthquakeLocaction(String earthquakeLocation) {
+        String[] splittedLocation = new String[2];
+
+        int charPos = earthquakeLocation.indexOf("of");
+        if(charPos > 0) {
+            charPos+=2;
+            splittedLocation[0] = earthquakeLocation.substring(0, charPos).trim();
+            splittedLocation[1] = earthquakeLocation.substring(charPos, earthquakeLocation.length()).trim();
+        } else {
+            splittedLocation[0] = "Near the";
+            splittedLocation[1] = earthquakeLocation;
+        }
+        return splittedLocation;
     }
 }
