@@ -8,7 +8,6 @@ import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
 import java.util.ArrayList;
-import android.util.Log;
 
 /**
  * Created by benjaminfras on 10/8/17.
@@ -20,6 +19,7 @@ import android.util.Log;
 * */
 public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
     public static final String LOG_TAG = EarthquakeAdapter.class.getSimpleName();
+    private static final String LOCATION_DELIMITER = "of ";
 
     /**
      * This is our own custom constructor (it doesn't mirror a superclass constructor).
@@ -66,13 +66,24 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         magnitudeTextView.setText(String.valueOf(currentEarthquake.getMagnitude()));
 
         // Find the TextView in the list_item.xml layout with the ID location
-        TextView locationTextView = (TextView) listItemView.findViewById(R.id.location);
-        TextView locationOffsetTextView = (TextView) listItemView.findViewById(R.id.locationoffset);
+        TextView locationTextView = (TextView) listItemView.findViewById(R.id.primary_location);
+        TextView locationOffsetTextView = (TextView) listItemView.findViewById(R.id.location_offset);
+
+        String primaryLocation;
+        String locationOffset;
+        if(currentEarthquake.getLocation().contains(LOCATION_DELIMITER)) {
+            String[] locationParts = currentEarthquake.getLocation().split(LOCATION_DELIMITER);
+            locationOffset = locationParts[0] + LOCATION_DELIMITER;
+            primaryLocation = locationParts[1];
+        } else {
+            locationOffset = getContext().getString(R.string.near_the);
+            primaryLocation = currentEarthquake.getLocation();
+        }
 
         // Get the location from the current Earthquake object and
         // set this text on the location TextView
-        locationOffsetTextView.setText(splitEarthquakeLocaction(currentEarthquake.getLocation())[0]);
-        locationTextView.setText(splitEarthquakeLocaction(currentEarthquake.getLocation())[1]);
+        locationOffsetTextView.setText(locationOffset);
+        locationTextView.setText(primaryLocation);
 
         // Find the Textview in the list_item.xml layout with the ID date
         TextView dateTextView = (TextView) listItemView.findViewById(R.id.date);
@@ -91,7 +102,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
      * @param earthquakeLocation
      * @return Returns an array with locationOffset and location
      */
-    private String[] splitEarthquakeLocaction(String earthquakeLocation) {
+    private String[] subEarthquakeLocaction(String earthquakeLocation) {
         String[] splittedLocation = new String[2];
 
         int charPos = earthquakeLocation.indexOf("of");
@@ -100,7 +111,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             splittedLocation[0] = earthquakeLocation.substring(0, charPos).trim();
             splittedLocation[1] = earthquakeLocation.substring(charPos, earthquakeLocation.length()).trim();
         } else {
-            splittedLocation[0] = "Near the";
+            splittedLocation[0] = getContext().getString(R.string.near_the);
             splittedLocation[1] = earthquakeLocation;
         }
         return splittedLocation;
