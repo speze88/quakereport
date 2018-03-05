@@ -7,6 +7,7 @@ import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 
+import java.text.DecimalFormat;
 import java.util.ArrayList;
 
 /**
@@ -61,14 +62,19 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
         // Find the TextView in the list_item.xml layout with the ID magnitude
         TextView magnitudeTextView = (TextView) listItemView.findViewById(R.id.magnitude);
 
-        // Get the magnitude from the current Earthquake object and
-        // set this text on the magnitude TextView
-        magnitudeTextView.setText(String.valueOf(currentEarthquake.getMagnitude()));
+        // Get the magnitude from the current Earthquake object
+        DecimalFormat df = new DecimalFormat("0.0");
+        String formatMagnitude = df.format(currentEarthquake.getMagnitude());
+
+        // Set formatted magnitude value on the magnitude TextView
+        magnitudeTextView.setText(String.valueOf(formatMagnitude));
 
         // Find the TextView in the list_item.xml layout with the ID location
         TextView locationTextView = (TextView) listItemView.findViewById(R.id.primary_location);
         TextView locationOffsetTextView = (TextView) listItemView.findViewById(R.id.location_offset);
 
+        // Get the location from the current Earthquake object and
+        // and split it up in location offset and primary location
         String primaryLocation;
         String locationOffset;
         if(currentEarthquake.getLocation().contains(LOCATION_DELIMITER)) {
@@ -80,8 +86,7 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
             primaryLocation = currentEarthquake.getLocation();
         }
 
-        // Get the location from the current Earthquake object and
-        // set this text on the location TextView
+        // Set the location text fields accordingly
         locationOffsetTextView.setText(locationOffset);
         locationTextView.setText(primaryLocation);
 
@@ -103,17 +108,17 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
      * @return Returns an array with locationOffset and location
      */
     private String[] subEarthquakeLocaction(String earthquakeLocation) {
-        String[] splittedLocation = new String[2];
+        String[] splitLocation = new String[2];
 
-        int charPos = earthquakeLocation.indexOf("of");
+        int charPos = earthquakeLocation.indexOf(LOCATION_DELIMITER);
         if(charPos > 0) {
             charPos+=2;
-            splittedLocation[0] = earthquakeLocation.substring(0, charPos).trim();
-            splittedLocation[1] = earthquakeLocation.substring(charPos, earthquakeLocation.length()).trim();
+            splitLocation[0] = earthquakeLocation.substring(0, charPos).trim();
+            splitLocation[1] = earthquakeLocation.substring(charPos, earthquakeLocation.length()).trim();
         } else {
-            splittedLocation[0] = getContext().getString(R.string.near_the);
-            splittedLocation[1] = earthquakeLocation;
+            splitLocation[0] = getContext().getString(R.string.near_the);
+            splitLocation[1] = earthquakeLocation;
         }
-        return splittedLocation;
+        return splitLocation;
     }
 }
