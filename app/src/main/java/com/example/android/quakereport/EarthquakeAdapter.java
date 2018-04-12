@@ -1,15 +1,14 @@
 package com.example.android.quakereport;
 
 import android.app.Activity;
-import android.graphics.drawable.Drawable;
 import android.support.v4.content.ContextCompat;
-import android.util.Log;
 import android.view.LayoutInflater;
 import android.view.View;
 import android.view.ViewGroup;
 import android.widget.ArrayAdapter;
 import android.widget.TextView;
 import java.text.DecimalFormat;
+import java.text.SimpleDateFormat;
 import java.util.ArrayList;
 import android.graphics.drawable.GradientDrawable;
 
@@ -103,7 +102,14 @@ public class EarthquakeAdapter extends ArrayAdapter<Earthquake> {
 
         // Get the date from the current Earthquake object and
         // set this text on the date TextView
-        dateTextView.setText(currentEarthquake.getDisplayDate());
+        dateTextView.setText(new SimpleDateFormat("MMM d, yyyy").format(currentEarthquake.getDate()));
+
+        // Find the Textview in the list_item.xml layout with the ID date
+        TextView timeTextView = (TextView) listItemView.findViewById(R.id.time);
+
+        // Get the date from the current Earthquake object and
+        // set this text on the date TextView
+        timeTextView.setText(new SimpleDateFormat("HH:mm").format(currentEarthquake.getDate()));
 
         // Return the whole list item layout (containing 3 TextViews)
         // so that it can be shown in the ListView
