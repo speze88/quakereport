@@ -45,14 +45,6 @@ public class Earthquake {
         }
     }
 
-    /**
-     *
-     * @return  formatted display date
-     */
-    public String getDisplayDate() {
-        return new SimpleDateFormat("MMM d, yyyy HH:mm").format(this.date);
-    }
-
     public double getMagnitude() {
         return this.magnitude;
     }

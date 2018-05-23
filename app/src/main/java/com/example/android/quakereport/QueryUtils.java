@@ -56,10 +56,12 @@ public final class QueryUtils {
                 String location = props.getString("place");
                 double magnitude = props.getDouble("mag");
                 long timestamp = props.getLong("time");
+                String url = props.getString("url");
 
                 Log.d("QueryUtils", "magnitude: " + magnitude
                         + ", location: " + location
-                        + ", timestamp: " + timestamp);
+                        + ", timestamp: " + timestamp
+                        + ", url: " + url);
 
                 Earthquake eq = new Earthquake(magnitude, location, timestamp);
                 earthquakes.add(eq);
